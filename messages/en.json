@@ -1,0 +1,104 @@
+{
+    "Common": {
+        "loading": "Loading...",
+        "error": "Something went wrong",
+        "required": "Required"
+    },
+    "Navbar": {
+        "findDoctors": "Find Doctors",
+        "howItWorks": "How it Works",
+        "login": "Login",
+        "createAccount": "Create Account",
+        "bookNow": "Book Now",
+        "signOut": "Sign Out"
+    },
+    "Hero": {
+        "title": "Your Health, Simply Booked",
+        "subtitle": "Find the best local clinics and book your appointment in seconds.",
+        "searchExample": "Try 'Dental' or 'Maadi'..."
+    },
+    "Features": {
+        "badge": "Why customers love us",
+        "title": "Booking made simple",
+        "subtitle": "Speed, simplicity, and trust are at the core of everything we do.",
+        "items": {
+            "noAccount": {
+                "title": "No Account Needed",
+                "description": "Book appointments instantly without the hassle of signing up."
+            },
+            "verified": {
+                "title": "Verified Clinics Only",
+                "description": "We personally verify every clinic on our platform."
+            },
+            "realtime": {
+                "title": "Real-time Availability",
+                "description": "See up-to-date slots and book what works for you."
+            },
+            "whatsapp": {
+                "title": "WhatsApp Integrated",
+                "description": "Get confirmations directly on WhatsApp. Simple and familiar."
+            }
+        }
+    },
+    "HowItWorks": {
+        "title": "How it Works",
+        "subtitle": "Booking a doctor's appointment has never been this simple.",
+        "steps": {
+            "step1": {
+                "title": "1. Find a Clinic",
+                "description": "Select your area and the specialist you need."
+            },
+            "step2": {
+                "title": "2. Choose a Slot",
+                "description": "View real-time availability and pick a time."
+            },
+            "step3": {
+                "title": "3. Book Instantly",
+                "description": "Enter your details and confirm via WhatsApp."
+            }
+        }
+    },
+    "Stats": {
+        "clinics": "Partner Clinics",
+        "patients": "Happy Patients",
+        "bookings": "Successful Bookings",
+        "rating": "Average Rating"
+    },
+    "Testimonials": {
+        "title": "What our users say",
+        "subtitle": "Join thousands of satisfied patients who trust ClinicBook.",
+        "items": {
+            "user1": "The easiest way to book a doctor in Cairo. No phone calls needed!",
+            "user2": "I love the WhatsApp integration. I got my confirmation in seconds.",
+            "user3": "Verified clinics give me peace of mind. Highly recommended."
+        }
+    },
+    "FAQ": {
+        "title": "Frequently Asked Questions",
+        "questions": {
+            "q1": "Is it completely free?",
+            "a1": "Yes, booking through ClinicBook is 100% free for patients.",
+            "q2": "Do I need an account?",
+            "a2": "No, you can book instantly without creating an account.",
+            "q3": "How do I cancel?",
+            "a3": "You can cancel directly through the WhatsApp link provided in your confirmation."
+        }
+    },
+    "BottomCTA": {
+        "title": "Ready to book your next appointment?",
+        "subtitle": "Don't wait in lines. Find your doctor and book now.",
+        "button": "Get Started Now"
+    },
+    "Auth": {
+        "loginTitle": "Login",
+        "registerTitle": "Create Account",
+        "email": "Email Address",
+        "password": "Password",
+        "signIn": "Sign In",
+        "register": "Register",
+        "clinicLogin": "Clinic Login",
+        "patientLogin": "Patient Login",
+        "dontHaveAccount": "Don't have an account?",
+        "alreadyHaveAccount": "Already have an account?"
+    }
+}
