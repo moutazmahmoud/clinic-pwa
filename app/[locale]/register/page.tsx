@@ -2,7 +2,7 @@
 
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { PatientRegisterForm } from "@/components/auth/PatientRegisterForm";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";

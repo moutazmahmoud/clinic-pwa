@@ -100,5 +100,27 @@
         "patientLogin": "Patient Login",
         "dontHaveAccount": "Don't have an account?",
         "alreadyHaveAccount": "Already have an account?"
+    },
+    "Admin": {
+        "dashboard": "Admin Dashboard",
+        "clinicsManagement": "Clinics Management",
+        "addNewClinic": "Add New Clinic",
+        "clinicName": "Clinic Name",
+        "area": "Area",
+        "specialty": "Specialty",
+        "status": "Status",
+        "actions": "Actions",
+        "active": "Active",
+        "disabled": "Disabled",
+        "disable": "Disable",
+        "enable": "Enable",
+        "emailForLogin": "Email (for Login)",
+        "phone": "Phone",
+        "workingHours": "Working Hours",
+        "cancel": "Cancel",
+        "createClinic": "Create Clinic",
+        "creating": "Creating...",
+        "clinicCreated": "Clinic created! Please ensure a matching Auth User exists with this email.",
+        "error": "Error: {message}"
     }
 }

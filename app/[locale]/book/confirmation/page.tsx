@@ -2,9 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function ConfirmationPage() {
     const searchParams = useSearchParams();

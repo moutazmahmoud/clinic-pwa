@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Link } from "lucide-react"; // Wait, this is an icon. I need next/link 
-// Actually I will import Link from next/link below
+import { Link, useRouter } from "@/i18n/navigation";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
 import { Loader2 } from "lucide-react";

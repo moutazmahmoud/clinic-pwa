@@ -79,7 +79,7 @@ export function Navbar() {
                     <Link href="/clinics" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
                         {t('findDoctors')}
                     </Link>
-                    <Link href="/about" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+                    <Link href="/" className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
                         {t('howItWorks')}
                     </Link>
 

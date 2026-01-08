@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Appointment } from "@/types";
 import { AppointmentCard } from "@/components/dashboard/AppointmentCard";
 import { Button } from "@/components/ui/Button";

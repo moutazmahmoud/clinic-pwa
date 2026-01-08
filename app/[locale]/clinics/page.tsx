@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { ClinicCard } from "@/components/patient/ClinicCard";
 import { SearchFilters } from "@/components/patient/SearchFilters";
 import { Button } from "@/components/ui/Button";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Clinic } from "@/types";
 
 // This is a Server Component

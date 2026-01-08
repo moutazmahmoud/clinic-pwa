@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { BookingForm } from "@/components/patient/BookingForm";
 import { Clinic } from "@/types";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 
 export default async function BookingPage({

@@ -19,3 +19,11 @@ export interface Appointment {
     status: 'pending' | 'confirmed' | 'completed' | 'no-show';
     created_at: string;
 }
+
+export interface Patient {
+    id: string;
+    full_name: string;
+    email: string;
+    phone: string;
+    created_at: string;
+}

@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { useTranslations } from 'next-intl';
 

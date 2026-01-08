@@ -100,5 +100,27 @@
         "patientLogin": "دخول المرضى",
         "dontHaveAccount": "ليس لديك حساب؟",
         "alreadyHaveAccount": "لديك حساب بالفعل؟"
+    },
+    "Admin": {
+        "dashboard": "لوحة تحكم المسؤول",
+        "clinicsManagement": "إدارة العيادات",
+        "addNewClinic": "إضافة عيادة جديدة",
+        "clinicName": "اسم العيادة",
+        "area": "المنطقة",
+        "specialty": "التخصص",
+        "status": "الحالة",
+        "actions": "الإجراءات",
+        "active": "نشط",
+        "disabled": "معطل",
+        "disable": "تعطيل",
+        "enable": "تفعيل",
+        "emailForLogin": "البريد الإلكتروني (للتسجيل)",
+        "phone": "الهاتف",
+        "workingHours": "ساعات العمل",
+        "cancel": "إلغاء",
+        "createClinic": "إنشاء عيادة",
+        "creating": "جاري الإنشاء...",
+        "clinicCreated": "تم إنشاء العيادة! يرجى التأكد من وجود مستخدم مطابق في Supabase Auth بهذا البريد الإلكتروني.",
+        "error": "خطأ: {message}"
     }
 }

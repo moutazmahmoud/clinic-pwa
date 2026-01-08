@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Clinic } from "@/types";
 import { Button } from "@/components/ui/Button";
 

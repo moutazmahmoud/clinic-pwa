@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link, useRouter } from "@/i18n/navigation";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
 // Input component not created yet, using standard inputs
