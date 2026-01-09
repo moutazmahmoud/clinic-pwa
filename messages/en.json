@@ -10,7 +10,8 @@
         "login": "Login",
         "createAccount": "Create Account",
         "bookNow": "Book Now",
-        "signOut": "Sign Out"
+        "signOut": "Sign Out",
+        "myAppointments": "My Appointments"
     },
     "Hero": {
         "title": "Your Health, Simply Booked",
@@ -99,7 +100,8 @@
         "clinicLogin": "Clinic Login",
         "patientLogin": "Patient Login",
         "dontHaveAccount": "Don't have an account?",
-        "alreadyHaveAccount": "Already have an account?"
+        "alreadyHaveAccount": "Already have an account?",
+        "loading": "Loading..."
     },
     "Admin": {
         "dashboard": "Admin Dashboard",
@@ -119,8 +121,32 @@
         "workingHours": "Working Hours",
         "cancel": "Cancel",
         "createClinic": "Create Clinic",
+        "bio": "Biography / Description",
+        "address": "Full Address",
+        "imageUrl": "Image URL (Direct link)",
         "creating": "Creating...",
         "clinicCreated": "Clinic created! Please ensure a matching Auth User exists with this email.",
         "error": "Error: {message}"
+    },
+    "Patient": {
+        "myAppointments": "My Appointments",
+        "noAppointments": "You haven't booked any appointments yet.",
+        "bookFirst": "Find a doctor and book your first visit!",
+        "clinic": "Clinic",
+        "date": "Date",
+        "time": "Time",
+        "status": "Status",
+        "details": "Details",
+        "cancel": "Cancel",
+        "backToHome": "Back to Home",
+        "bookingId": "Booking ID"
+    },
+    "Clinics": {
+        "viewDetails": "View Details",
+        "about": "About the Clinic",
+        "location": "Location",
+        "bookAppointment": "Book an Appointment",
+        "contactInfo": "Contact Information",
+        "featured": "Featured Clinic"
     }
 }

@@ -10,7 +10,8 @@
         "login": "تسجيل دخول",
         "createAccount": "إنشاء حساب",
         "bookNow": "احجز الآن",
-        "signOut": "تسجيل خروج"
+        "signOut": "تسجيل خروج",
+        "myAppointments": "مواعيدي"
     },
     "Hero": {
         "title": "صحتك، حجزت ببساطة",
@@ -99,7 +100,8 @@
         "clinicLogin": "دخول العيادات",
         "patientLogin": "دخول المرضى",
         "dontHaveAccount": "ليس لديك حساب؟",
-        "alreadyHaveAccount": "لديك حساب بالفعل؟"
+        "alreadyHaveAccount": "لديك حساب بالفعل؟",
+        "loading": "جاري التحميل..."
     },
     "Admin": {
         "dashboard": "لوحة تحكم المسؤول",
@@ -119,8 +121,32 @@
         "workingHours": "ساعات العمل",
         "cancel": "إلغاء",
         "createClinic": "إنشاء عيادة",
+        "bio": "السيرة الذاتية / الوصف",
+        "address": "العنوان الكامل",
+        "imageUrl": "رابط الصورة",
         "creating": "جاري الإنشاء...",
         "clinicCreated": "تم إنشاء العيادة! يرجى التأكد من وجود مستخدم مطابق في Supabase Auth بهذا البريد الإلكتروني.",
         "error": "خطأ: {message}"
+    },
+    "Patient": {
+        "myAppointments": "مواعيدي",
+        "noAppointments": "لم تقم بحجز أي مواعيد بعد.",
+        "bookFirst": "ابحث عن طبيب واحجز زيارتك الأولى!",
+        "clinic": "العيادة",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "status": "الحالة",
+        "details": "التفاصيل",
+        "cancel": "إلغاء",
+        "backToHome": "العودة للرئيسية",
+        "bookingId": "رقم الحجز"
+    },
+    "Clinics": {
+        "viewDetails": "عرض التفاصيل",
+        "about": "عن العيادة",
+        "location": "الموقع",
+        "bookAppointment": "حجز موعد",
+        "contactInfo": "معلومات الاتصال",
+        "featured": "عيادة مميزة"
     }
 }

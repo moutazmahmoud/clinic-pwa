@@ -12,6 +12,7 @@ export function Navbar() {
     const t = useTranslations('Navbar');
     const [isScrolled, setIsScrolled] = useState(false);
     const [user, setUser] = useState<any>(null);
+    const [userType, setUserType] = useState<'patient' | 'clinic' | 'admin' | null>(null);
     const router = useRouter();
     const pathname = usePathname();
 
@@ -31,10 +32,27 @@ export function Navbar() {
         });
 
         // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            const newUser = session?.user ?? null;
+            setUser(newUser);
+
+            if (newUser) {
+                // Determine user type
+                if (newUser.email === "moutaz.prof.egy@gmail.com") {
+                    setUserType('admin');
+                } else {
+                    const { data: clinic } = await supabase.from('clinics').select('id').eq('email', newUser.email!).maybeSingle();
+                    if (clinic) {
+                        setUserType('clinic');
+                    } else {
+                        setUserType('patient');
+                    }
+                }
+            } else {
+                setUserType(null);
+            }
+
             if (_event === 'SIGNED_OUT') {
-                setUser(null);
                 router.push('/');
             }
         });
@@ -85,6 +103,21 @@ export function Navbar() {
 
                     {user ? (
                         <div className="flex items-center gap-4">
+                            {userType === 'patient' && (
+                                <Link href="/patient/dashboard" className="text-sm font-medium text-primary hover:underline">
+                                    {t('myAppointments', { defaultValue: 'My Appointments' })}
+                                </Link>
+                            )}
+                            {userType === 'clinic' && (
+                                <Link href="/clinic/dashboard" className="text-sm font-medium text-primary hover:underline">
+                                    {t('dashboard', { defaultValue: 'Dashboard' })}
+                                </Link>
+                            )}
+                            {userType === 'admin' && (
+                                <Link href="/admin/dashboard" className="text-sm font-medium text-primary hover:underline">
+                                    {t('admin', { defaultValue: 'Admin' })}
+                                </Link>
+                            )}
                             <span className="text-sm font-medium text-gray-600">
                                 {user.email}
                             </span>

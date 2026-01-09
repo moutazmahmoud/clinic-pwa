@@ -19,7 +19,8 @@ export default function AdminDashboard() {
 
     const checkAdmin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user || user.email !== "admin@local.com") {
+        if (!user || user.email !== "moutaz.prof.egy@gmail.com") {
+            console.log("User not found or not admin");
             router.push("/login");
             return;
         }

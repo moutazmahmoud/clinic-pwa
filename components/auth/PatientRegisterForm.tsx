@@ -53,7 +53,7 @@ export function PatientRegisterForm() {
                     throw dbError;
                 }
 
-                router.push("/"); // Redirect to home or patient dashboard
+                router.push("/patient/dashboard"); // Redirect to patient dashboard
             }
         } catch (err: any) {
             setError(err.message);

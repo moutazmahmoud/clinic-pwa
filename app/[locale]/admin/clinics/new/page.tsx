@@ -19,6 +19,9 @@ export default function AddClinicPage() {
         area: AREAS[0],
         specialty: SPECIALTIES[0],
         working_hours: "09:00 - 17:00",
+        bio: "",
+        image_url: "",
+        address: "",
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -127,6 +130,39 @@ export default function AddClinicPage() {
                                     className="block w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-900 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all sm:text-sm"
                                     value={formData.working_hours}
                                     onChange={e => setFormData({ ...formData, working_hours: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">{t('bio')}</label>
+                                <textarea
+                                    placeholder="Tell patients about your clinic..."
+                                    rows={4}
+                                    className="block w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-900 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all sm:text-sm"
+                                    value={formData.bio}
+                                    onChange={e => setFormData({ ...formData, bio: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">{t('address')}</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. 123 Health St, Maadi"
+                                    className="block w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-900 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all sm:text-sm"
+                                    value={formData.address}
+                                    onChange={e => setFormData({ ...formData, address: e.target.value })}
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-700 mb-2">{t('imageUrl')}</label>
+                                <input
+                                    type="text"
+                                    placeholder="https://example.com/image.jpg"
+                                    className="block w-full rounded-xl border border-gray-200 bg-gray-50/50 px-4 py-3 text-gray-900 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all sm:text-sm"
+                                    value={formData.image_url}
+                                    onChange={e => setFormData({ ...formData, image_url: e.target.value })}
                                 />
                             </div>
                         </div>

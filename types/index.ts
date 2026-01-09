@@ -7,6 +7,9 @@ export interface Clinic {
     working_hours: string; // Database column is working_hours
     is_active: boolean;    // Database column is is_active
     email: string;
+    bio?: string;
+    image_url?: string;
+    address?: string;
 }
 
 export interface Appointment {
@@ -16,6 +19,7 @@ export interface Appointment {
     time: string;
     patient_name: string;  // Database column is patient_name
     patient_phone: string; // Database column is patient_phone
+    patient_id?: string;   // Database column is patient_id
     status: 'pending' | 'confirmed' | 'completed' | 'no-show';
     created_at: string;
 }

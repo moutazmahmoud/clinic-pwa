@@ -27,7 +27,12 @@ export function LoginForm() {
 
             if (error) throw error;
 
-            // 1. Check if user is a clinic
+            // 1. Admin Check
+            if (email === "moutaz.prof.egy@gmail.com") {
+                router.push("/admin/dashboard");
+                return;
+            }
+            // 2. Check if user is a clinic
             const { data: clinic, error: clinicError } = await supabase
                 .from("clinics")
                 .select("id")
@@ -41,7 +46,7 @@ export function LoginForm() {
                 return;
             }
 
-            // 2. Check if user is a patient
+            // 3. Check if user is a patient
             const { data: patient, error: patientError } = await supabase
                 .from("patients")
                 .select("id")
@@ -55,11 +60,6 @@ export function LoginForm() {
                 return;
             }
 
-            // 3. Admin Check
-            if (email === "admin@local.com") {
-                router.push("/admin/dashboard");
-                return;
-            }
 
             // If no profile found but auth successful (shouldn't happen with proper registration flow)
             await supabase.auth.signOut();
@@ -101,7 +101,7 @@ export function LoginForm() {
                 </div>
 
                 <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? t('Common.loading') : t('signIn')}
+                    {loading ? t('loading') : t('signIn')}
                 </Button>
                 <p className="text-center text-sm text-gray-500 mt-4">
                     {t('dontHaveAccount')} <Link href="/register" className="text-primary font-semibold hover:underline">{t('register')}</Link>
