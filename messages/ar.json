@@ -138,6 +138,7 @@
         "status": "الحالة",
         "details": "التفاصيل",
         "cancel": "إلغاء",
+        "cancelled": "ملغي",
         "backToHome": "العودة للرئيسية",
         "bookingId": "رقم الحجز"
     },

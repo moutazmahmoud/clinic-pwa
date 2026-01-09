@@ -73,12 +73,12 @@ export default function PatientDashboard() {
 
         const { error } = await supabase
             .from("appointments")
-            .update({ status: 'no-show' }) // Using 'no-show' as a proxy for cancelled for now
+            .update({ status: 'cancelled' })
             .eq("id", id);
 
         if (!error) {
             setAppointments(appointments.map(a =>
-                a.id === id ? { ...a, status: 'no-show' } : a
+                a.id === id ? { ...a, status: 'cancelled' } : a
             ));
         }
     };

@@ -138,6 +138,7 @@
         "status": "Status",
         "details": "Details",
         "cancel": "Cancel",
+        "cancelled": "Cancelled",
         "backToHome": "Back to Home",
         "bookingId": "Booking ID"
     },

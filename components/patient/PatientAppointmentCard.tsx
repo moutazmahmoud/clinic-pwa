@@ -17,6 +17,7 @@ export function PatientAppointmentCard({ appointment, onCancel }: PatientAppoint
         confirmed: "bg-emerald-100 text-emerald-700 border-emerald-200",
         completed: "bg-slate-100 text-slate-700 border-slate-200",
         "no-show": "bg-rose-100 text-rose-700 border-rose-200",
+        cancelled: "bg-gray-100 text-gray-700 border-gray-200",
     };
 
     const clinic = appointment.clinics;
@@ -28,7 +29,7 @@ export function PatientAppointmentCard({ appointment, onCancel }: PatientAppoint
                     <div className="flex items-center gap-3">
                         <h3 className="text-xl font-bold text-gray-900">{clinic?.name || t('clinic')}</h3>
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${statusColors[appointment.status]}`}>
-                            {appointment.status.toUpperCase()}
+                            {t(appointment.status === 'no-show' ? 'noShow' : appointment.status)}
                         </span>
                     </div>
 

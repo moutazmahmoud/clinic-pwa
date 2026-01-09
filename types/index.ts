@@ -20,7 +20,7 @@ export interface Appointment {
     patient_name: string;  // Database column is patient_name
     patient_phone: string; // Database column is patient_phone
     patient_id?: string;   // Database column is patient_id
-    status: 'pending' | 'confirmed' | 'completed' | 'no-show';
+    status: 'pending' | 'confirmed' | 'completed' | 'no-show' | 'cancelled';
     created_at: string;
 }
 

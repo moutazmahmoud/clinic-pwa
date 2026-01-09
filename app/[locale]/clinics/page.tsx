@@ -9,9 +9,9 @@ import { Clinic } from "@/types";
 export default async function ClinicsPage({
     searchParams,
 }: {
-    searchParams: { area?: string; specialty?: string };
+    searchParams: Promise<{ area?: string; specialty?: string }>;
 }) {
-    const { area, specialty } = searchParams;
+    const { area, specialty } = await searchParams;
 
     let query = supabase.from("clinics").select("*").eq("is_active", true);
 

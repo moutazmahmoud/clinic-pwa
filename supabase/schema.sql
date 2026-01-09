@@ -36,7 +36,7 @@ CREATE TABLE appointments (
   patient_name text NOT NULL,
   patient_phone text NOT NULL,
   patient_id uuid REFERENCES patients(id) ON DELETE SET NULL,
-  status text CHECK (status IN ('pending', 'confirmed', 'completed', 'no-show')) DEFAULT 'pending',
+  status text CHECK (status IN ('pending', 'confirmed', 'completed', 'no-show', 'cancelled')) DEFAULT 'pending',
   created_at timestamptz DEFAULT now()
 );
 
