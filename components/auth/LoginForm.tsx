@@ -27,43 +27,18 @@ export function LoginForm() {
 
             if (error) throw error;
 
-            // 1. Admin Check
-            if (email === "moutaz.prof.egy@gmail.com") {
-                router.push("/admin/dashboard");
-                return;
-            }
-            // 2. Check if user is a clinic
-            const { data: clinic, error: clinicError } = await supabase
-                .from("clinics")
-                .select("id")
-                .eq("email", email)
-                .maybeSingle();
+            // Get user role from metadata
+            const { getUserRole, getDashboardPath } = await import("@/lib/auth");
+            const role = await getUserRole();
 
-            console.log("Clinic check:", { clinic, clinicError }); // Debug log
-
-            if (clinic) {
-                router.push("/clinic/dashboard");
+            if (!role) {
+                await supabase.auth.signOut();
+                setError("Account type not recognized. Please register.");
                 return;
             }
 
-            // 3. Check if user is a patient
-            const { data: patient, error: patientError } = await supabase
-                .from("patients")
-                .select("id")
-                .eq("email", email)
-                .maybeSingle();
-
-            console.log("Patient check:", { patient, patientError }); // Debug log
-
-            if (patient) {
-                router.push("/");
-                return;
-            }
-
-
-            // If no profile found but auth successful (shouldn't happen with proper registration flow)
-            await supabase.auth.signOut();
-            setError("Account type not recognized. Please register.");
+            // Redirect to appropriate dashboard
+            router.push(getDashboardPath(role));
 
         } catch (err: any) {
             setError(err.message);

@@ -26,9 +26,14 @@ export function Navbar() {
         };
         window.addEventListener("scroll", handleScroll);
 
-        // Check initial user
-        supabase.auth.getUser().then(({ data: { user } }) => {
+        // Check initial user and role
+        supabase.auth.getUser().then(async ({ data: { user } }) => {
             setUser(user);
+            if (user) {
+                const { getUserRole } = await import("@/lib/auth");
+                const role = await getUserRole();
+                setUserType(role as 'patient' | 'clinic' | 'admin' | null);
+            }
         });
 
         // Listen for auth changes
@@ -37,17 +42,10 @@ export function Navbar() {
             setUser(newUser);
 
             if (newUser) {
-                // Determine user type
-                if (newUser.email === "moutaz.prof.egy@gmail.com") {
-                    setUserType('admin');
-                } else {
-                    const { data: clinic } = await supabase.from('clinics').select('id').eq('email', newUser.email!).maybeSingle();
-                    if (clinic) {
-                        setUserType('clinic');
-                    } else {
-                        setUserType('patient');
-                    }
-                }
+                // Determine user type using role metadata
+                const { getUserRole } = await import("@/lib/auth");
+                const role = await getUserRole();
+                setUserType(role as 'patient' | 'clinic' | 'admin' | null);
             } else {
                 setUserType(null);
             }

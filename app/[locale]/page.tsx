@@ -6,10 +6,12 @@ import { TestimonialsSection } from "@/components/landing/TestimonialsSection";
 import { FAQSection } from "@/components/landing/FAQSection";
 import { BottomCTA } from "@/components/landing/BottomCTA";
 import { Navbar } from "@/components/layout/Navbar";
+import { HomeRedirect } from "@/components/layout/HomeRedirect";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col">
+      <HomeRedirect />
       <Navbar />
       <HeroSection />
       <StatsSection />

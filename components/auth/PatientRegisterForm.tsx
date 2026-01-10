@@ -31,10 +31,15 @@ export function PatientRegisterForm() {
         setError(null);
 
         try {
-            // 1. Sign up user with Supabase Auth
+            // 1. Sign up user with Supabase Auth and set role
             const { data: authData, error: authError } = await supabase.auth.signUp({
                 email: formData.email,
                 password: formData.password,
+                options: {
+                    data: {
+                        role: "patient",
+                    },
+                },
             });
 
             if (authError) throw authError;
