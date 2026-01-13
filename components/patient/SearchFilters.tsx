@@ -1,18 +1,22 @@
 "use client";
 
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { useState } from "react";
 import { AREAS, SPECIALTIES } from "@/constants";
 import { Button } from "@/components/ui/Button";
 
 export function SearchFilters({ className }: { className?: string }) {
     const router = useRouter();
+    const pathname = usePathname();
     const [area, setArea] = useState("");
     const [specialty, setSpecialty] = useState("");
 
     const handleSearch = () => {
         if (area && specialty) {
-            router.push(`/clinics?area=${encodeURIComponent(area)}&specialty=${encodeURIComponent(specialty)}`);
+            const path = pathname.startsWith('/patient/dashboard')
+                ? '/patient/dashboard/clinics'
+                : '/clinics';
+            router.push(`${path}?area=${encodeURIComponent(area)}&specialty=${encodeURIComponent(specialty)}`);
         }
     };
 

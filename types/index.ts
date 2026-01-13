@@ -10,6 +10,25 @@ export interface Clinic {
     bio?: string;
     image_url?: string;
     address?: string;
+    slot_duration_minutes?: number;
+}
+
+export interface ClinicSchedule {
+    id: string;
+    clinic_id: string;
+    day_of_week: number;
+    start_time: string;
+    end_time: string;
+    is_active: boolean;
+}
+
+export interface UnavailableSlot {
+    id: string;
+    clinic_id: string;
+    date: string;
+    start_time: string;
+    end_time: string;
+    reason?: string;
 }
 
 export interface Appointment {

@@ -1,4 +1,4 @@
-import { LucideIcon, LayoutDashboard, Users, Calendar, Settings, Stethoscope, ClipboardList, UserCircle, Search } from "lucide-react";
+import { LucideIcon, LayoutDashboard, Users, Calendar, Settings, Stethoscope, ClipboardList, UserCircle, Search, Clock } from "lucide-react";
 import { UserRole } from "./auth";
 
 export interface NavItem {
@@ -42,14 +42,19 @@ export const navigationConfig: Record<UserRole, NavItem[]> = {
             icon: Calendar,
         },
         {
+            label: "Availability",
+            href: "/clinic/dashboard/availability",
+            icon: Clock,
+        },
+        {
             label: "Patients",
             href: "/clinic/patients",
             icon: Users,
         },
         {
-            label: "Settings",
-            href: "/clinic/settings",
-            icon: Settings,
+            label: "Profile",
+            href: "/clinic/dashboard/profile",
+            icon: UserCircle,
         },
     ],
     patient: [
@@ -60,12 +65,12 @@ export const navigationConfig: Record<UserRole, NavItem[]> = {
         },
         {
             label: "Find Doctors",
-            href: "/clinics",
+            href: "/patient/dashboard/clinics",
             icon: Search,
         },
         {
             label: "Profile",
-            href: "/patient/profile",
+            href: "/patient/dashboard/profile",
             icon: UserCircle,
         },
     ],

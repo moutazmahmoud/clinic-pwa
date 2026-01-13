@@ -4,14 +4,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
-import { Clinic } from "@/types";
-
-interface BookingFormProps {
-    clinic: Clinic;
-}
-
+import { Clinic, ClinicSchedule, UnavailableSlot, Appointment } from "@/types";
 import { useTranslations } from "next-intl";
 import { Calendar, Clock, User, Phone, Loader2, CheckCircle2 } from "lucide-react";
+import { format, addMinutes, parse, isBefore, isSameDay } from "date-fns";
 
 interface BookingFormProps {
     clinic: Clinic;
@@ -21,15 +17,17 @@ export function BookingForm({ clinic }: BookingFormProps) {
     const router = useRouter();
     const t = useTranslations("Clinics");
     const [loading, setLoading] = useState(false);
+    const [fetchingSlots, setFetchingSlots] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const [availableSlots, setAvailableSlots] = useState<string[]>([]);
+
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
         date: "",
         time: "",
     });
-
-    const [isPatient, setIsPatient] = useState(false);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -47,12 +45,98 @@ export function BookingForm({ clinic }: BookingFormProps) {
                         name: patient.full_name,
                         phone: patient.phone,
                     }));
-                    setIsPatient(true);
                 }
             }
         };
         fetchUserData();
     }, []);
+
+    useEffect(() => {
+        if (formData.date) {
+            fetchAvailableSlots(formData.date);
+        } else {
+            setAvailableSlots([]);
+        }
+    }, [formData.date, clinic.id]);
+
+    const fetchAvailableSlots = async (dateStr: string) => {
+        setFetchingSlots(true);
+        setAvailableSlots([]);
+        setFormData(prev => ({ ...prev, time: "" })); // Reset time selection
+
+        try {
+            // Append T12:00:00 to avoid timezone issues shifting the day
+            const date = new Date(dateStr + 'T12:00:00');
+            const dayOfWeek = date.getDay(); // 0 = Sunday
+
+            // 1. Get Clinic Schedule for this day
+            const { data: scheduleData } = await supabase
+                .from("clinic_schedules")
+                .select("*")
+                .eq("clinic_id", clinic.id)
+                .eq("day_of_week", dayOfWeek)
+                .eq("is_active", true)
+                .single();
+
+            if (!scheduleData) {
+                setFetchingSlots(false);
+                return; // Clinic closed
+            }
+
+            const schedule = scheduleData as ClinicSchedule;
+
+            // 2. Get Unavailable Slots for this specific date
+            const { data: blockedData } = await supabase
+                .from("unavailable_slots")
+                .select("*")
+                .eq("clinic_id", clinic.id)
+                .eq("date", dateStr);
+
+            const blockedSlots = (blockedData || []) as UnavailableSlot[];
+
+            // 3. Get Existing Appointments
+            const { data: appointmentData } = await supabase
+                .from("appointments")
+                .select("time")
+                .eq("clinic_id", clinic.id)
+                .eq("status", "pending") // Or confirmed? Assuming pending blocks slot too
+                .eq("date", dateStr);
+
+            const bookedTimes = (appointmentData || []).map((a: { time: string }) => a.time.slice(0, 5));
+
+            // 4. Generate All Possible Slots
+            const slots: string[] = [];
+            let current = parse(schedule.start_time, 'HH:mm:ss', new Date());
+            const end = parse(schedule.end_time, 'HH:mm:ss', new Date());
+            const duration = clinic.slot_duration_minutes || 30;
+
+            while (isBefore(current, end)) {
+                const timeStr = format(current, 'HH:mm');
+
+                // Check Overlaps
+                const isBlocked = blockedSlots.some(slot => {
+                    const slotStart = slot.start_time.slice(0, 5);
+                    const slotEnd = slot.end_time.slice(0, 5);
+                    return timeStr >= slotStart && timeStr < slotEnd;
+                });
+
+                const isBooked = bookedTimes.includes(timeStr);
+
+                if (!isBlocked && !isBooked) {
+                    slots.push(timeStr);
+                }
+
+                current = addMinutes(current, duration);
+            }
+
+            setAvailableSlots(slots);
+
+        } catch (error) {
+            console.error("Error fetching slots:", error);
+        } finally {
+            setFetchingSlots(false);
+        }
+    };
 
     const generateWhatsAppLink = (appointmentId: string) => {
         const message = `Hello, I would like to confirm my appointment.\n\nClinic: ${clinic.name}\nPatient: ${formData.name}\nDate: ${formData.date}\nTime: ${formData.time}\nID: ${appointmentId}`;
@@ -81,6 +165,19 @@ export function BookingForm({ clinic }: BookingFormProps) {
                 if (patient) patientId = patient.id;
             }
 
+            // Double Check Availability before booking (Concurrency)
+            const { data: existing } = await supabase
+                .from("appointments")
+                .select("id")
+                .eq("clinic_id", clinic.id)
+                .eq("date", formData.date)
+                .eq("time", formData.time)
+                .single();
+
+            if (existing) {
+                throw new Error("This slot was just booked by someone else. Please choose another time.");
+            }
+
             const { data, error: dbError } = await supabase
                 .from("appointments")
                 .insert([
@@ -105,6 +202,8 @@ export function BookingForm({ clinic }: BookingFormProps) {
         } catch (err: any) {
             console.error(err);
             setError(err.message || "Failed to book appointment");
+            // Refresh slots if error might be due to availability
+            if (formData.date) fetchAvailableSlots(formData.date);
         } finally {
             setLoading(false);
         }
@@ -160,11 +259,11 @@ export function BookingForm({ clinic }: BookingFormProps) {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-4 pt-2">
                         <div className="space-y-2">
                             <label className="text-sm font-bold text-gray-700 ml-1 flex items-center gap-2">
                                 <Calendar className="h-3.5 w-3.5 text-gray-400" />
-                                Date
+                                Select Date
                             </label>
                             <input
                                 required
@@ -172,28 +271,52 @@ export function BookingForm({ clinic }: BookingFormProps) {
                                 className="w-full rounded-2xl border-gray-100 bg-gray-50/50 px-4 py-3.5 text-sm font-medium transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/5"
                                 value={formData.date}
                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                min={new Date().toISOString().split('T')[0]}
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-gray-700 ml-1 flex items-center gap-2">
-                                <Clock className="h-3.5 w-3.5 text-gray-400" />
-                                Time
-                            </label>
-                            <input
-                                required
-                                type="time"
-                                className="w-full rounded-2xl border-gray-100 bg-gray-50/50 px-4 py-3.5 text-sm font-medium transition-all focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/5"
-                                value={formData.time}
-                                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                            />
-                        </div>
+
+                        {formData.date && (
+                            <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                                <label className="text-sm font-bold text-gray-700 ml-1 flex items-center gap-2">
+                                    <Clock className="h-3.5 w-3.5 text-gray-400" />
+                                    Available Slots
+                                </label>
+
+                                {fetchingSlots ? (
+                                    <div className="flex justify-center py-8">
+                                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                                    </div>
+                                ) : availableSlots.length > 0 ? (
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                                        {availableSlots.map(time => (
+                                            <button
+                                                key={time}
+                                                type="button"
+                                                onClick={() => setFormData({ ...formData, time })}
+                                                className={`py-2 px-1 rounded-xl text-sm font-semibold transition-all ${formData.time === time
+                                                    ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-105'
+                                                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100 hover:scale-105'
+                                                    }`}
+                                            >
+                                                {time}
+                                            </button>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-6 bg-gray-50 rounded-xl border border-gray-100">
+                                        <p className="text-sm text-gray-500 font-medium">No available slots for this date.</p>
+                                        <p className="text-xs text-gray-400 mt-1">Please try another day.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <Button
                     type="submit"
                     className="h-14 w-full rounded-2xl bg-primary text-base font-black shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70"
-                    disabled={loading}
+                    disabled={loading || !formData.time}
                 >
                     {loading ? (
                         <>
