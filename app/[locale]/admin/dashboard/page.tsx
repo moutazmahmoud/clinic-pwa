@@ -6,6 +6,8 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { Clinic } from "@/types";
 import { useTranslations } from "next-intl";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Loader2 } from "lucide-react";
 
 export default function AdminDashboard() {
     const router = useRouter();
@@ -46,28 +48,22 @@ export default function AdminDashboard() {
 
     if (loading) return (
         <div className="flex min-h-screen items-center justify-center bg-gray-50">
-            <div className="flex flex-col items-center gap-2">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                <p className="text-gray-500 font-medium">Loading...</p>
+            <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <p className="text-gray-500 font-medium">Loading dashboard...</p>
             </div>
         </div>
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 sm:p-8">
-            <div className="mx-auto max-w-6xl space-y-8">
-                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-sm border border-gray-100">
+        <DashboardLayout userRole="admin" userName="Administrator" pageTitle="Admin Dashboard">
+            <div className="space-y-6">
+                {/* Page Header */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{t('dashboard')}</h1>
-                        <p className="text-gray-500 mt-1">Manage your platform clinics and settings</p>
+                        <h2 className="text-2xl font-bold text-gray-900">{t('clinicsManagement')}</h2>
+                        <p className="text-gray-500 mt-1">Manage and monitor all platform clinics</p>
                     </div>
-                    <Button variant="outline" className="w-full sm:w-auto" onClick={() => { supabase.auth.signOut(); router.push("/login"); }}>
-                        Sign Out
-                    </Button>
-                </header>
-
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h2 className="text-xl font-semibold text-gray-800">{t('clinicsManagement')}</h2>
                     <Link href="/admin/clinics/new" className="w-full sm:w-auto">
                         <Button className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
                             {t('addNewClinic')}
@@ -75,10 +71,11 @@ export default function AdminDashboard() {
                     </Link>
                 </div>
 
+                {/* Clinics Table */}
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                            <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('clinicName')}</th>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('area')}</th>
@@ -127,6 +124,6 @@ export default function AdminDashboard() {
                     </div>
                 </div>
             </div>
-        </div>
+        </DashboardLayout>
     );
 }

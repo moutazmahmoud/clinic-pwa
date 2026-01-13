@@ -5,7 +5,8 @@ import { supabase } from "@/lib/supabase";
 import { useRouter } from "@/i18n/navigation";
 import { Appointment } from "@/types";
 import { AppointmentCard } from "@/components/dashboard/AppointmentCard";
-import { Button } from "@/components/ui/Button";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Loader2, Calendar } from "lucide-react";
 
 export default function ClinicDashboard() {
     const router = useRouter();
@@ -34,7 +35,7 @@ export default function ClinicDashboard() {
 
             if (error || !clinic) {
                 console.error("Not a clinic user");
-                router.push("/login"); // Or access denied page
+                router.push("/login");
                 return;
             }
 
@@ -73,47 +74,53 @@ export default function ClinicDashboard() {
 
         if (error) {
             console.error("Failed to update status", error);
-            // Revert if needed, but for MVP just log
         }
     };
 
-    const handleSignOut = async () => {
-        await supabase.auth.signOut();
-        router.push("/login");
-    };
-
-    if (loading) return <div className="p-8 text-center bg-gray-50 min-h-screen">Loading dashboard...</div>;
-
-    return (
-        <div className="min-h-screen bg-gray-50 p-4">
-            <div className="mx-auto max-w-4xl space-y-6">
-                <header className="flex items-center justify-between rounded-lg bg-white p-6 shadow-sm">
-                    <div>
-                        <h1 className="text-2xl font-bold">{clinicName}</h1>
-                        <p className="text-sm text-muted-foreground">Dashboard</p>
-                    </div>
-                    <Button variant="outline" onClick={handleSignOut}>
-                        Sign Out
-                    </Button>
-                </header>
-
-                <main className="space-y-4">
-                    <h2 className="text-lg font-semibold">Today's Appointments</h2>
-                    <div className="space-y-4">
-                        {appointments.length === 0 ? (
-                            <p className="text-center text-muted-foreground py-8">No appointments found.</p>
-                        ) : (
-                            appointments.map((appt) => (
-                                <AppointmentCard
-                                    key={appt.id}
-                                    appointment={appt}
-                                    onStatusChange={updateStatus}
-                                />
-                            ))
-                        )}
-                    </div>
-                </main>
+    if (loading) return (
+        <div className="flex min-h-screen items-center justify-center bg-gray-50">
+            <div className="flex flex-col items-center gap-4">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                <p className="text-gray-500 font-medium">Loading dashboard...</p>
             </div>
         </div>
+    );
+
+    return (
+        <DashboardLayout userRole="clinic" userName={clinicName} pageTitle="Clinic Dashboard">
+            <div className="space-y-6">
+                {/* Header Section */}
+                <div className="flex items-center gap-3 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+                    <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <Calendar className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900">Today's Appointments</h2>
+                        <p className="text-gray-500">Manage and track your patient appointments</p>
+                    </div>
+                </div>
+
+                {/* Appointments List */}
+                <div className="space-y-4">
+                    {appointments.length === 0 ? (
+                        <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
+                            <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                                <Calendar className="h-8 w-8 text-gray-300" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">No Appointments</h3>
+                            <p className="text-gray-500 mt-2">You have no appointments scheduled for today.</p>
+                        </div>
+                    ) : (
+                        appointments.map((appt) => (
+                            <AppointmentCard
+                                key={appt.id}
+                                appointment={appt}
+                                onStatusChange={updateStatus}
+                            />
+                        ))
+                    )}
+                </div>
+            </div>
+        </DashboardLayout>
     );
 }
