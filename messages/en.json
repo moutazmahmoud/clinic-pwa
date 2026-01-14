@@ -140,7 +140,12 @@
         "cancel": "Cancel",
         "cancelled": "Cancelled",
         "backToHome": "Back to Home",
-        "bookingId": "Booking ID"
+        "bookingId": "Booking ID",
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "completed": "Completed",
+        "noShow": "No Show",
+        "whatsapp": "WhatsApp"
     },
     "Clinics": {
         "viewDetails": "View Details",

@@ -73,7 +73,7 @@ export function PatientAppointmentCard({ appointment, onCancel }: PatientAppoint
                                 className="flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-xl text-sm font-bold hover:scale-105 transition-transform"
                             >
                                 <Phone className="h-4 w-4 fill-white" />
-                                WhatsApp
+                                {t('whatsapp')}
                             </a>
                         </>
                     )}

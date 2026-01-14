@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link, useRouter } from "@/i18n/navigation";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
-// Input component not created yet, using standard inputs
+import { Input } from "@/components/ui/Input";
 import { Loader2 } from "lucide-react";
 import { AREAS, SPECIALTIES } from "@/constants";
 
@@ -86,51 +86,44 @@ export function RegisterForm() {
                 </div>
             )}
 
-            <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-medium text-gray-700">Clinic Name</label>
-                <input
+            <div className="space-y-4">
+                <Input
                     id="name"
-                    type="text"
+                    label="Clinic Name"
                     required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     value={formData.name}
                     onChange={handleChange}
+                    placeholder="e.g. Health Plus Clinic"
                 />
-            </div>
 
-            <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</label>
-                <input
+                <Input
                     id="email"
                     type="email"
+                    label="Email Address"
                     required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     value={formData.email}
                     onChange={handleChange}
+                    placeholder="clinic@example.com"
                 />
-            </div>
 
-            <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
-                <input
+                <Input
                     id="password"
                     type="password"
+                    label="Password"
                     required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     value={formData.password}
                     onChange={handleChange}
+                    placeholder="Create a strong password"
                 />
-            </div>
 
-            <div className="space-y-2">
-                <label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone Number</label>
-                <input
+                <Input
                     id="phone"
                     type="tel"
+                    label="Phone Number"
                     required
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                     value={formData.phone}
                     onChange={handleChange}
+                    placeholder="0123 456 7890"
                 />
             </div>
 

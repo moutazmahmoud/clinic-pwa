@@ -37,11 +37,6 @@ export const navigationConfig: Record<UserRole, NavItem[]> = {
             icon: LayoutDashboard,
         },
         {
-            label: "Appointments",
-            href: "/clinic/dashboard",
-            icon: Calendar,
-        },
-        {
             label: "Availability",
             href: "/clinic/dashboard/availability",
             icon: Clock,

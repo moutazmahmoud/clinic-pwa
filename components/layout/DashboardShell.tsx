@@ -5,16 +5,16 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardHeader } from "./DashboardHeader";
 import { DashboardContent } from "./DashboardContent";
 import { UserRole } from "@/lib/auth";
+import { useDashboard } from "./DashboardContext";
 
-interface DashboardLayoutProps {
+interface DashboardShellProps {
     children: ReactNode;
     userRole: UserRole;
-    userName?: string;
-    pageTitle: string;
 }
 
-export function DashboardLayout({ children, userRole, userName, pageTitle }: DashboardLayoutProps) {
+export function DashboardShell({ children, userRole }: DashboardShellProps) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { title, userName } = useDashboard();
 
     return (
         <div className="flex h-screen bg-gray-50 overflow-hidden">
@@ -29,7 +29,7 @@ export function DashboardLayout({ children, userRole, userName, pageTitle }: Das
             <div className="flex flex-col flex-1 overflow-hidden">
                 {/* Header */}
                 <DashboardHeader
-                    title={pageTitle}
+                    title={title}
                     userName={userName}
                     userRole={userRole}
                     onMenuClick={() => setSidebarOpen(!sidebarOpen)}

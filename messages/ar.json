@@ -140,7 +140,12 @@
         "cancel": "إلغاء",
         "cancelled": "ملغي",
         "backToHome": "العودة للرئيسية",
-        "bookingId": "رقم الحجز"
+        "bookingId": "رقم الحجز",
+        "pending": "قيد الانتظار",
+        "confirmed": "مؤكد",
+        "completed": "مكتمل",
+        "noShow": "لم يحضر",
+        "whatsapp": "واتساب"
     },
     "Clinics": {
         "viewDetails": "عرض التفاصيل",

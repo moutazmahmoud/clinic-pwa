@@ -6,18 +6,21 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
 import { Clinic } from "@/types";
 import { useTranslations } from "next-intl";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { Loader2 } from "lucide-react";
+
+import { useDashboard } from "@/components/layout/DashboardContext";
 
 export default function AdminDashboard() {
     const router = useRouter();
     const t = useTranslations("Admin");
+    const { setTitle } = useDashboard();
     const [loading, setLoading] = useState(true);
     const [clinics, setClinics] = useState<Clinic[]>([]);
 
     useEffect(() => {
+        setTitle("Admin Dashboard");
         checkAdmin();
-    }, []);
+    }, [setTitle]);
 
     const checkAdmin = async () => {
         const { data: { user } } = await supabase.auth.getUser();
@@ -56,74 +59,72 @@ export default function AdminDashboard() {
     );
 
     return (
-        <DashboardLayout userRole="admin" userName="Administrator" pageTitle="Admin Dashboard">
-            <div className="space-y-6">
-                {/* Page Header */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">{t('clinicsManagement')}</h2>
-                        <p className="text-gray-500 mt-1">Manage and monitor all platform clinics</p>
-                    </div>
-                    <Link href="/admin/clinics/new" className="w-full sm:w-auto">
-                        <Button className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
-                            {t('addNewClinic')}
-                        </Button>
-                    </Link>
+        <div className="space-y-6">
+            {/* Page Header */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">{t('clinicsManagement')}</h2>
+                    <p className="text-gray-500 mt-1">Manage and monitor all platform clinics</p>
                 </div>
+                <Link href="/admin/clinics/new" className="w-full sm:w-auto">
+                    <Button className="w-full sm:w-auto shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform">
+                        {t('addNewClinic')}
+                    </Button>
+                </Link>
+            </div>
 
-                {/* Clinics Table */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div className="overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+            {/* Clinics Table */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+                            <tr>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('clinicName')}</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('area')}</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('specialty')}</th>
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('status')}</th>
+                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('actions')}</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-100">
+                            {clinics.length === 0 ? (
                                 <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('clinicName')}</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('area')}</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('specialty')}</th>
-                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('status')}</th>
-                                    <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">{t('actions')}</th>
+                                    <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
+                                        No clinics found. Create your first one!
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody className="bg-white divide-y divide-gray-100">
-                                {clinics.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={5} className="px-6 py-12 text-center text-gray-500">
-                                            No clinics found. Create your first one!
+                            ) : (
+                                clinics.map((clinic) => (
+                                    <tr key={clinic.id} className="hover:bg-gray-50/50 transition-colors">
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex flex-col">
+                                                <span className="text-sm font-bold text-gray-900">{clinic.name}</span>
+                                                <span className="text-xs text-gray-500">{clinic.email}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{clinic.area}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{clinic.specialty}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${clinic.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                                <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${clinic.is_active ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                                                {clinic.is_active ? t('active') : t('disabled')}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button
+                                                onClick={() => toggleStatus(clinic.id, clinic.is_active)}
+                                                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${clinic.is_active ? 'text-red-600 hover:bg-red-50' : 'text-primary hover:bg-primary/5'}`}
+                                            >
+                                                {clinic.is_active ? t('disable') : t('enable')}
+                                            </button>
                                         </td>
                                     </tr>
-                                ) : (
-                                    clinics.map((clinic) => (
-                                        <tr key={clinic.id} className="hover:bg-gray-50/50 transition-colors">
-                                            <td className="px-6 py-4 whitespace-nowrap">
-                                                <div className="flex flex-col">
-                                                    <span className="text-sm font-bold text-gray-900">{clinic.name}</span>
-                                                    <span className="text-xs text-gray-500">{clinic.email}</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{clinic.area}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{clinic.specialty}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${clinic.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                                    <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${clinic.is_active ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                                                    {clinic.is_active ? t('active') : t('disabled')}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <button
-                                                    onClick={() => toggleStatus(clinic.id, clinic.is_active)}
-                                                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${clinic.is_active ? 'text-red-600 hover:bg-red-50' : 'text-primary hover:bg-primary/5'}`}
-                                                >
-                                                    {clinic.is_active ? t('disable') : t('enable')}
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </DashboardLayout>
+        </div>
     );
 }

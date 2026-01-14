@@ -6,10 +6,11 @@ import { Link, useRouter } from "@/i18n/navigation";
 import { Clinic } from "@/types";
 import { ClinicCard } from "@/components/patient/ClinicCard";
 import { SearchFilters } from "@/components/patient/SearchFilters";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { useTranslations } from "next-intl";
 import { Loader2, Stethoscope, Search } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+
+import { useDashboard } from "@/components/layout/DashboardContext";
 
 function ClinicsList() {
     const searchParams = useSearchParams();
@@ -86,12 +87,13 @@ function ClinicsList() {
 export default function PatientClinicsPage() {
     const router = useRouter();
     const t = useTranslations("Patient");
+    const { setTitle } = useDashboard();
     const [loading, setLoading] = useState(true);
-    const [userName, setUserName] = useState("");
 
     useEffect(() => {
+        setTitle("Find Clinics");
         checkUser();
-    }, []);
+    }, [setTitle]);
 
     const checkUser = async () => {
         try {
@@ -112,7 +114,6 @@ export default function PatientClinicsPage() {
                 return;
             }
 
-            setUserName(patient.full_name);
             setLoading(false);
         } catch (error) {
             console.error(error);
@@ -127,27 +128,25 @@ export default function PatientClinicsPage() {
     );
 
     return (
-        <DashboardLayout userRole="patient" userName={userName} pageTitle="Find Clinics">
-            <div className="space-y-6">
-                {/* Header Section */}
-                <div className="flex items-center gap-3 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
-                    <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <Stethoscope className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Available Clinics</h2>
-                        <p className="text-gray-500">Find and book appointments with top medical professionals</p>
-                    </div>
+        <div className="space-y-6">
+            {/* Header Section */}
+            <div className="flex items-center gap-3 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <Stethoscope className="h-6 w-6 text-blue-600" />
                 </div>
-
-                {/* Filters */}
-                <SearchFilters className="!max-w-none !bg-white !shadow-sm !border-gray-100" />
-
-                {/* Search Results */}
-                <Suspense fallback={<div>Loading filters...</div>}>
-                    <ClinicsList />
-                </Suspense>
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Available Clinics</h2>
+                    <p className="text-gray-500">Find and book appointments with top medical professionals</p>
+                </div>
             </div>
-        </DashboardLayout>
+
+            {/* Filters */}
+            <SearchFilters className="!max-w-none !bg-white !shadow-sm !border-gray-100" />
+
+            {/* Search Results */}
+            <Suspense fallback={<div>Loading filters...</div>}>
+                <ClinicsList />
+            </Suspense>
+        </div>
     );
 }

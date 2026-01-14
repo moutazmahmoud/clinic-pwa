@@ -8,7 +8,7 @@ import { PatientAppointmentCard } from "@/components/patient/PatientAppointmentC
 import { Button } from "@/components/ui/Button";
 import { useTranslations } from "next-intl";
 import { CalendarDays, Loader2 } from "lucide-react";
-import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { useDashboard } from "@/components/layout/DashboardContext";
 
 type AppointmentWithClinic = Appointment & { clinics?: Clinic };
 
@@ -16,13 +16,14 @@ export default function PatientDashboard() {
     const router = useRouter();
     const t = useTranslations("Patient");
     const tCommon = useTranslations("Common");
+    const { setTitle } = useDashboard();
     const [loading, setLoading] = useState(true);
     const [appointments, setAppointments] = useState<AppointmentWithClinic[]>([]);
-    const [userName, setUserName] = useState("");
 
     useEffect(() => {
+        setTitle(t('myAppointments'));
         checkUser();
-    }, []);
+    }, [setTitle, t]);
 
     const checkUser = async () => {
         try {
@@ -45,7 +46,6 @@ export default function PatientDashboard() {
                 return;
             }
 
-            setUserName(patient.full_name);
             fetchAppointments(patient.id);
         } catch (error) {
             console.error(error);
@@ -94,45 +94,43 @@ export default function PatientDashboard() {
     );
 
     return (
-        <DashboardLayout userRole="patient" userName={userName} pageTitle={t('myAppointments')}>
-            <div className="space-y-6">
-                {/* Header Section */}
-                <div className="flex items-center gap-3 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
-                    <div className="h-12 w-12 rounded-xl bg-green-100 flex items-center justify-center">
-                        <CalendarDays className="h-6 w-6 text-green-600" />
-                    </div>
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900">Appointment History</h2>
-                        <p className="text-gray-500">Track your past and upcoming appointments</p>
-                    </div>
+        <div className="space-y-6">
+            {/* Header Section */}
+            <div className="flex items-center gap-3 p-6 rounded-2xl bg-white shadow-sm border border-gray-100">
+                <div className="h-12 w-12 rounded-xl bg-green-100 flex items-center justify-center">
+                    <CalendarDays className="h-6 w-6 text-green-600" />
                 </div>
-
-                {/* Appointments List */}
-                <div className="grid gap-4">
-                    {appointments.length === 0 ? (
-                        <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200">
-                            <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                <CalendarDays className="h-8 w-8 text-gray-300" />
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900">{t('noAppointments')}</h3>
-                            <p className="text-gray-500 mt-2 mb-6">{t('bookFirst')}</p>
-                            <Link href="/clinics">
-                                <Button className="rounded-xl shadow-lg shadow-primary/20 bg-primary hover:scale-105 transition-transform">
-                                    Find a Doctor
-                                </Button>
-                            </Link>
-                        </div>
-                    ) : (
-                        appointments.map((appt) => (
-                            <PatientAppointmentCard
-                                key={appt.id}
-                                appointment={appt}
-                                onCancel={handleCancel}
-                            />
-                        ))
-                    )}
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Appointment History</h2>
+                    <p className="text-gray-500">Track your past and upcoming appointments</p>
                 </div>
             </div>
-        </DashboardLayout>
+
+            {/* Appointments List */}
+            <div className="grid gap-4">
+                {appointments.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+                        <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                            <CalendarDays className="h-8 w-8 text-gray-300" />
+                        </div>
+                        <h3 className="text-lg font-bold text-gray-900">{t('noAppointments')}</h3>
+                        <p className="text-gray-500 mt-2 mb-6">{t('bookFirst')}</p>
+                        <Link href="/clinics">
+                            <Button className="rounded-xl shadow-lg shadow-primary/20 bg-primary hover:scale-105 transition-transform">
+                                Find a Doctor
+                            </Button>
+                        </Link>
+                    </div>
+                ) : (
+                    appointments.map((appt) => (
+                        <PatientAppointmentCard
+                            key={appt.id}
+                            appointment={appt}
+                            onCancel={handleCancel}
+                        />
+                    ))
+                )}
+            </div>
+        </div>
     );
 }

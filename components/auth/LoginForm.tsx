@@ -4,6 +4,7 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { Link, useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
@@ -53,29 +54,25 @@ export function LoginForm() {
             <form onSubmit={handleLogin} className="space-y-4">
                 {error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{error}</div>}
 
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">{t('email')}</label>
-                    <input
-                        type="email"
-                        required
-                        className="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
+                <Input
+                    label={t('email')}
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="name@example.com"
+                />
 
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">{t('password')}</label>
-                    <input
-                        type="password"
-                        required
-                        className="flex h-10 w-full rounded-md border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
+                <Input
+                    label={t('password')}
+                    type="password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                />
 
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full text-base font-bold h-11 shadow-lg shadow-primary/20 mt-2" disabled={loading}>
                     {loading ? t('loading') : t('signIn')}
                 </Button>
                 <p className="text-center text-sm text-gray-500 mt-4">

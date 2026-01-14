@@ -14,19 +14,18 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
     ({ className, type = "text", label, error, helperText, containerClassName, ...props }, ref) => {
         const [showPassword, setShowPassword] = useState(false);
-        const [inputType, setInputType] = useState(type);
 
         const togglePasswordVisibility = () => {
             setShowPassword(!showPassword);
-            setInputType(showPassword ? "password" : "text");
         };
 
         const isPasswordType = type === "password";
+        const currentType = isPasswordType ? (showPassword ? "text" : "password") : type;
 
         return (
             <div className={cn("space-y-2", containerClassName)}>
                 {label && (
-                    <label className="text-sm font-medium text-gray-700">
+                    <label className="text-sm font-bold text-gray-700 ml-1">
                         {label}
                         {props.required && <span className="text-red-500 ml-1">*</span>}
                     </label>
@@ -34,14 +33,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
                 <div className="relative">
                     <input
-                        type={isPasswordType ? inputType : type}
+                        type={currentType}
                         className={cn(
-                            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-                            "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-                            "placeholder:text-muted-foreground",
-                            "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                            "flex w-full rounded-2xl border-gray-200 bg-gray-50/50 px-4 py-3.5 text-sm font-medium transition-all",
+                            "placeholder:text-gray-400",
+                            "focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/5",
                             "disabled:cursor-not-allowed disabled:opacity-50",
-                            error && "border-red-500 focus:ring-red-500",
+                            error && "border-red-200 bg-red-50/50 focus:border-red-500 focus:ring-red-500/10",
                             isPasswordType && "pr-10",
                             className
                         )}
@@ -53,24 +51,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                         <button
                             type="button"
                             onClick={togglePasswordVisibility}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
                             tabIndex={-1}
                         >
                             {showPassword ? (
-                                <EyeOff className="h-4 w-4" />
+                                <EyeOff className="h-5 w-5" />
                             ) : (
-                                <Eye className="h-4 w-4" />
+                                <Eye className="h-5 w-5" />
                             )}
                         </button>
                     )}
                 </div>
 
                 {error && (
-                    <p className="text-sm text-red-500">{error}</p>
+                    <p className="text-xs font-medium text-red-500 ml-1 animate-in slide-in-from-left-1">{error}</p>
                 )}
 
                 {helperText && !error && (
-                    <p className="text-sm text-gray-500">{helperText}</p>
+                    <p className="text-xs text-gray-500 ml-1">{helperText}</p>
                 )}
             </div>
         );
