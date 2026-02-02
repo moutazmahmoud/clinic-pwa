@@ -16,7 +16,7 @@ export const navigationConfig: Record<UserRole, NavItem[]> = {
         },
         {
             label: "Clinics Management",
-            href: "/admin/dashboard",
+            href: "/admin/clinics",
             icon: Stethoscope,
         },
         {
